@@ -19,7 +19,11 @@ public class PatronsDTO {
 
     @Override
     public String toString() {
-        return "PatronsDTO{%d, %s, %.2f}".formatted(patron_id, name, fines);
+        var result = "%s with ID #%d".formatted(name, patron_id);
+        if (fines != 0.0) {
+            result += " with fines of $%.2f".formatted(fines);
+        }
+        return result;
     }
 
     @Override

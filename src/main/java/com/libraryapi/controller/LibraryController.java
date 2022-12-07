@@ -1,6 +1,8 @@
 package com.libraryapi.controller;
 
+import com.libraryapi.domain.Books;
 import com.libraryapi.domain.BooksRepository;
+import com.libraryapi.domain.Patrons;
 import com.libraryapi.domain.PatronsRepository;
 import com.libraryapi.dto.BooksDTO;
 import com.libraryapi.dto.PatronsDTO;
@@ -57,16 +59,16 @@ public class LibraryController {
 		if (bookToCheckout == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
 		}
-		System.out.printf("\tFound book: %s\n", new BooksDTO(bookToCheckout));
+		System.out.printf("\t[NOTE] Found book: %s\n", new BooksDTO(bookToCheckout));
 
 		var patron = patronsRepository.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
-		System.out.printf("\tFound patron: %s\n", new PatronsDTO(patron));
+		System.out.printf("\t[NOTE] Found patron: %s\n", new PatronsDTO(patron));
 
 		if (patron.getFines() != 0.0) {
-			System.out.printf("\tCould not checkout: patron owes fines of $%.2f\n", patron.getFines());
+			System.out.printf("\t[WARN] Could not checkout: patron owes fines of $%.2f\n", patron.getFines());
 			return Status.PatronHasFines.getStatusCode();
 		}
 

@@ -24,8 +24,11 @@ public class BooksDTO {
 
     @Override
     public String toString() {
-        return "BooksDTO{%d, %s, %s, %d, %s}"
-            .formatted(book_id, title, author, checkout_patron_id, checkout_date);
+        var result = "\"%s\" by %s with ID %d".formatted(title, author, book_id);
+        if (checkout_date != null) {
+            result += " checked out on %s by patron #%d".formatted(checkout_date, checkout_patron_id);
+        }
+        return result;
     }
 
     @Override
