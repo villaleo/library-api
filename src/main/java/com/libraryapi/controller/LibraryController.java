@@ -1,7 +1,10 @@
 package com.libraryapi.controller;
 
+import com.libraryapi.domain.BooksRepository;
+import com.libraryapi.domain.PatronsRepository;
 import com.libraryapi.dto.BooksDTO;
 import com.libraryapi.dto.PatronsDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -10,6 +13,11 @@ import java.util.List;
 
 @RestController
 public class LibraryController {
+	@Autowired
+	BooksRepository booksRepository;
+	@Autowired
+	PatronsRepository patronsRepository;
+
 	/**
 	 * Represents the response values from methods in LibraryController
 	 */
