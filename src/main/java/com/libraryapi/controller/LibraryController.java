@@ -127,7 +127,11 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}")
 	PatronsDTO fetchPatron(@PathVariable int patron_id) throws HttpClientErrorException.NotFound  {
-		// TODO: Implement business logic
-		return null;
+		var patron = patronsRepository.findByPatronId(patron_id);
+		if (patron == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
+		}
+		System.out.printf("\t[INFO] Found patron: %s\n", new PatronsDTO(patron));
+		return new PatronsDTO(patron);
 	}
 }
