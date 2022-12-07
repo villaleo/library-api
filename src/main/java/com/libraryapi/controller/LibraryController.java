@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -98,8 +99,23 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}/checkouts")
 	List<BooksDTO> listPatronCheckouts(@PathVariable int patron_id) throws HttpClientErrorException.NotFound {
-		// TODO: Implement business logic
-		return null;
+		var patron = patronsRepository.findByPatronId(patron_id);
+		if (patron == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
+		}
+		System.out.printf("\t[INFO] Found patron: %s\n", new PatronsDTO(patron));
+
+		List<BooksDTO> result = new ArrayList<>();
+		var booksCheckedOut = booksRepository.findByCheckoutPatronId(patron_id);
+		if (booksCheckedOut.isEmpty()) {
+			System.out.printf("\t[WARN] Empty result: no entries returned for patron with ID %d\n", patron_id);
+			return result;
+		}
+
+		booksCheckedOut.forEach(book -> result.add(new BooksDTO(book)));
+		System.out.println("\t[INFO] Found books:");
+		result.forEach(entry -> System.out.printf("\t\t%s\n", entry));
+		return result;
 	}
 
 	/**
