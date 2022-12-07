@@ -24,23 +24,8 @@ public class LibraryController {
 	@Autowired
 	PatronsRepository patronsRepository;
 
-	/**
-	 * Represents the response values from methods in LibraryController
-	 */
-	enum Status {
-		Ok(1),
-		PatronHasFines(-3);
-
-		private final int statusCode;
-
-		Status(int code) {
-			this.statusCode = code;
-		}
-
-		public int getStatusCode() {
-			return this.statusCode;
-		}
-	}
+	public static final int StatusOk        = 1;
+	public static final int StatusOwesFines = -3;
 
 	/**
 	 * A patron checks out a book
@@ -59,17 +44,17 @@ public class LibraryController {
 		if (bookToCheckout == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
 		}
-		System.out.printf("\t[NOTE] Found book: %s\n", new BooksDTO(bookToCheckout));
+		System.out.printf("\t[INFO] Found book: %s\n", new BooksDTO(bookToCheckout));
 
 		var patron = patronsRepository.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
-		System.out.printf("\t[NOTE] Found patron: %s\n", new PatronsDTO(patron));
+		System.out.printf("\t[INFO] Found patron: %s\n", new PatronsDTO(patron));
 
 		if (patron.getFines() != 0.0) {
 			System.out.printf("\t[WARN] Could not checkout: patron owes fines of $%.2f\n", patron.getFines());
-			return Status.PatronHasFines.getStatusCode();
+			return StatusOwesFines;
 		}
 
 		var currentTime = new Date(Instant.now().toEpochMilli());
@@ -77,8 +62,8 @@ public class LibraryController {
 		bookToCheckout.setCheckoutDate(currentTime);
 		booksRepository.save(bookToCheckout);
 
-		System.out.printf("\tUpdated book: %s\n", new BooksDTO(bookToCheckout));
-		return Status.Ok.statusCode;
+		System.out.printf("\t[INFO] Updated book: %s\n", new BooksDTO(bookToCheckout));
+		return StatusOk;
 	}
 
 	/**
@@ -91,7 +76,7 @@ public class LibraryController {
 	@Transactional
 	public int returnBook(@PathVariable int book_id) throws HttpClientErrorException.NotFound {
 		// TODO: Implement business logic
-		return Status.Ok.statusCode;
+		return StatusOk;
 	}
 
 	/**
