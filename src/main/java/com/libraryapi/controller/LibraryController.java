@@ -41,13 +41,13 @@ public class LibraryController {
 
 		var bookToCheckout = booksRepository.findByBookId(book_id);
 		if (bookToCheckout == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID %d does not exist!".formatted(book_id));
 		}
 		System.out.printf("\t[INFO] Found book: %s\n", new BooksDTO(bookToCheckout));
 
 		var patron = patronsRepository.findByPatronId(patron_id);
 		if (patron == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patron with ID %d does not exist!".formatted(patron_id));
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
 		System.out.printf("\t[INFO] Found patron: %s\n", new PatronsDTO(patron));
 
@@ -78,7 +78,7 @@ public class LibraryController {
 
 		var bookToReturn = booksRepository.findByBookId(book_id);
 		if (bookToReturn == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID %d does not exist!".formatted(book_id));
 		}
 		System.out.printf("\t[NOTE] Found book: %s\n", new BooksDTO(bookToReturn));
 
