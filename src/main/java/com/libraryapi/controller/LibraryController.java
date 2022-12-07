@@ -4,7 +4,6 @@ import com.libraryapi.domain.BooksRepository;
 import com.libraryapi.domain.PatronsRepository;
 import com.libraryapi.dto.BooksDTO;
 import com.libraryapi.dto.PatronsDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,16 @@ import java.util.List;
 
 @RestController
 public class LibraryController {
-	@Autowired
-	BooksRepository booksRepository;
-	@Autowired
-	PatronsRepository patronsRepository;
+	protected final BooksRepository booksRepository;
+	protected final PatronsRepository patronsRepository;
 
 	public static final int StatusOk        = 0;
 	public static final int StatusOwesFines = -3;
+
+	public LibraryController(BooksRepository booksRepository, PatronsRepository patronsRepository) {
+		this.booksRepository = booksRepository;
+		this.patronsRepository = patronsRepository;
+	}
 
 	/**
 	 * A patron checks out a book
