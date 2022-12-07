@@ -37,7 +37,7 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/checkout/{patron_id}")
 	@Transactional
 	public int checkoutBook(@PathVariable int book_id, @PathVariable int patron_id) throws HttpClientErrorException.NotFound {
-		System.out.printf("\tEndpoint /book/%d/checkout/%d hit!\n", book_id, patron_id);
+		System.out.printf("\t[INFO] Endpoint /book/%d/checkout/%d hit!\n", book_id, patron_id);
 
 		var bookToCheckout = booksRepository.findByBookId(book_id);
 		if (bookToCheckout == null) {
@@ -74,7 +74,7 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/return")
 	@Transactional
 	public int returnBook(@PathVariable int book_id) throws HttpClientErrorException.NotFound {
-		System.out.printf("\tEndpoint /book/%d/return hit!\n", book_id);
+		System.out.printf("\t[INFO] Endpoint /book/%d/return hit!\n", book_id);
 
 		var bookToReturn = booksRepository.findByBookId(book_id);
 		if (bookToReturn == null) {
@@ -99,6 +99,8 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}/checkouts")
 	List<BooksDTO> listPatronCheckouts(@PathVariable int patron_id) throws HttpClientErrorException.NotFound {
+		System.out.printf("\t[INFO] Endpoint /patron/%d/checkouts hit!\n", patron_id);
+
 		var patron = patronsRepository.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
@@ -108,7 +110,7 @@ public class LibraryController {
 		List<BooksDTO> result = new ArrayList<>();
 		var booksCheckedOut = booksRepository.findByCheckoutPatronId(patron_id);
 		if (booksCheckedOut.isEmpty()) {
-			System.out.printf("\t[WARN] Empty result: no entries returned for patron with ID %d\n", patron_id);
+			System.out.printf("\t[INFO] Patron with ID %d has no books checked out\n", patron_id);
 			return result;
 		}
 
@@ -127,6 +129,8 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}")
 	PatronsDTO fetchPatron(@PathVariable int patron_id) throws HttpClientErrorException.NotFound  {
+		System.out.printf("\t[INFO] Endpoint /patron/%d hit!\n", patron_id);
+
 		var patron = patronsRepository.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
