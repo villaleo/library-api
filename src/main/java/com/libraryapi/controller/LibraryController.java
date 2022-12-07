@@ -16,6 +16,16 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for the Library API, having the following endpoints:
+ * <ul>
+ *     <li><code>/book/{book_id}/checkout/{patron_id}</code>: Patron checks out a book</li>
+ *     <li><code>/book/{book_id}/return</code>: Return a book</li>
+ *     <li><code>/patron/{patron_id}/checkouts</code>: List patron checkouts</li>
+ *     <li><code>/patron/{patron_id}</code>: View patron information</li>
+ * </ul>
+ * @author villaleobos
+ */
 @RestController
 public class LibraryController {
 	protected final BooksRepository booksRepository;
