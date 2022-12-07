@@ -1,8 +1,6 @@
 package com.libraryapi.controller;
 
-import com.libraryapi.domain.Books;
 import com.libraryapi.domain.BooksRepository;
-import com.libraryapi.domain.Patrons;
 import com.libraryapi.domain.PatronsRepository;
 import com.libraryapi.dto.BooksDTO;
 import com.libraryapi.dto.PatronsDTO;
@@ -24,7 +22,7 @@ public class LibraryController {
 	@Autowired
 	PatronsRepository patronsRepository;
 
-	public static final int StatusOk        = 1;
+	public static final int StatusOk        = 0;
 	public static final int StatusOwesFines = -3;
 
 	/**
