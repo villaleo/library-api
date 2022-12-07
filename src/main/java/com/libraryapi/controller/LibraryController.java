@@ -73,7 +73,19 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/return")
 	@Transactional
 	public int returnBook(@PathVariable int book_id) throws HttpClientErrorException.NotFound {
-		// TODO: Implement business logic
+		System.out.printf("\tEndpoint /book/%d/return hit!\n", book_id);
+
+		var bookToReturn = booksRepository.findByBookId(book_id);
+		if (bookToReturn == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
+		}
+		System.out.printf("\t[NOTE] Found book: %s\n", new BooksDTO(bookToReturn));
+
+		bookToReturn.setCheckoutDate(null);
+		bookToReturn.setCheckoutPatronId(null);
+		booksRepository.save(bookToReturn);
+
+		System.out.printf("\t[NOTE] Returned book: %s\n", new BooksDTO(bookToReturn));
 		return StatusOk;
 	}
 
