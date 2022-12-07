@@ -5,10 +5,14 @@ import com.libraryapi.domain.PatronsRepository;
 import com.libraryapi.dto.BooksDTO;
 import com.libraryapi.dto.PatronsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -47,7 +51,31 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/checkout/{patron_id}")
 	@Transactional
 	public int checkoutBook(@PathVariable int book_id, @PathVariable int patron_id) throws HttpClientErrorException.NotFound {
-		// TODO: Implement business logic
+		System.out.printf("\tEndpoint /book/%d/checkout/%d hit!\n", book_id, patron_id);
+
+		var bookToCheckout = booksRepository.findByBookId(book_id);
+		if (bookToCheckout == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with ID %d does not exist!".formatted(book_id));
+		}
+		System.out.printf("\tFound book: %s\n", new BooksDTO(bookToCheckout));
+
+		var patron = patronsRepository.findByPatronId(patron_id);
+		if (patron == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patron with ID %d does not exist!".formatted(patron_id));
+		}
+		System.out.printf("\tFound patron: %s\n", new PatronsDTO(patron));
+
+		if (patron.getFines() != 0.0) {
+			System.out.printf("\tCould not checkout: patron owes fines of $%.2f\n", patron.getFines());
+			return Status.PatronHasFines.getStatusCode();
+		}
+
+		var currentTime = new Date(Instant.now().toEpochMilli());
+		bookToCheckout.setCheckoutPatronId(patron_id);
+		bookToCheckout.setCheckoutDate(currentTime);
+		booksRepository.save(bookToCheckout);
+
+		System.out.printf("\tUpdated book: %s\n", new BooksDTO(bookToCheckout));
 		return Status.Ok.statusCode;
 	}
 
