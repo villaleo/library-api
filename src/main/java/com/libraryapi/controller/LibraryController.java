@@ -100,7 +100,7 @@ public class LibraryController {
 	 * not found
 	 */
 	@GetMapping("/patron/{patron_id}/checkouts")
-	List<BooksDTO> listPatronCheckouts(@PathVariable int patron_id) throws HttpClientErrorException.NotFound {
+	public List<BooksDTO> listPatronCheckouts(@PathVariable int patron_id) throws HttpClientErrorException.NotFound {
 		System.out.printf("\t[INFO] Endpoint /patron/%d/checkouts hit!\n", patron_id);
 
 		var patron = patronsRepository.findByPatronId(patron_id);
@@ -130,7 +130,7 @@ public class LibraryController {
 	 * not found
 	 */
 	@GetMapping("/patron/{patron_id}")
-	PatronsDTO fetchPatron(@PathVariable int patron_id) throws HttpClientErrorException.NotFound  {
+	public PatronsDTO fetchPatron(@PathVariable int patron_id) throws HttpClientErrorException.NotFound  {
 		System.out.printf("\t[INFO] Endpoint /patron/%d hit!\n", patron_id);
 
 		var patron = patronsRepository.findByPatronId(patron_id);
