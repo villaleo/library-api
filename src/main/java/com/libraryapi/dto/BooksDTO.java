@@ -12,8 +12,6 @@ public class BooksDTO {
     public Integer checkout_patron_id;
     public Date checkout_date;
 
-    public BooksDTO() {}
-
     public BooksDTO(Books entity) {
         book_id = entity.getBookId();
         title = entity.getTitle();

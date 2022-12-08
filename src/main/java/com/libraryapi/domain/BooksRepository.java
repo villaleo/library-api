@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BooksRepository extends CrudRepository<Books, Integer> {
-    @Query("select book from Books book where book.checkoutPatronId = :patronId")
+    @Query("select book from books book where book.checkoutPatronId = :patronId")
     List<Books> findByCheckoutPatronId(@Param(value = "patronId") int patronId);
 
     Books findByBookId(int bookId);

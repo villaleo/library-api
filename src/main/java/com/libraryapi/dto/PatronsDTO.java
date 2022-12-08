@@ -9,8 +9,6 @@ public class PatronsDTO {
     public String name;
     public Double fines;
 
-    public PatronsDTO() {}
-
     public PatronsDTO(Patrons entity) {
         patron_id = entity.getPatronId();
         name = entity.getName();

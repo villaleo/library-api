@@ -2,7 +2,7 @@ package com.libraryapi.domain;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "patrons")
 public class Patrons {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,23 +20,11 @@ public class Patrons {
         super();
     }
 
-    public void setPatronId(Integer patron_id) {
-        this.patronId = patron_id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Double getFines() {
         return fines;
-    }
-
-    public void setFines(double fines) {
-        this.fines = fines;
     }
 }
