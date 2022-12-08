@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cst438</groupId>
-    <artifactId>RegisterBackend</artifactId>
+    <artifactId>LibraryAPI</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>RegisterBackend</name>
     <description>RegisterBackend</description>
