@@ -3,7 +3,7 @@ package com.libraryapi.domain;
 import javax.persistence.*;
 
 @Entity(name = "patrons")
-public class Patrons {
+public class Patron {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "patron_id")
@@ -16,7 +16,7 @@ public class Patrons {
         return patronId;
     }
 
-    public Patrons() {
+    public Patron() {
         super();
     }
 

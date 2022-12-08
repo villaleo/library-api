@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "books")
-public class Books {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
@@ -17,7 +17,7 @@ public class Books {
     @Column(name = "checkout_date")
     private Date checkoutDate;
 
-    public Books() {
+    public Book() {
         super();
     }
 

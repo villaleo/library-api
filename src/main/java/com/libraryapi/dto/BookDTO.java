@@ -1,18 +1,18 @@
 package com.libraryapi.dto;
 
-import com.libraryapi.domain.Books;
+import com.libraryapi.domain.Book;
 
 import java.util.Date;
 import java.util.Objects;
 
-public class BooksDTO {
+public class BookDTO {
     public Integer book_id;
     public String title;
     public String author;
     public Integer checkout_patron_id;
     public Date checkout_date;
 
-    public BooksDTO(Books entity) {
+    public BookDTO(Book entity) {
         book_id = entity.getBookId();
         title = entity.getTitle();
         author = entity.getAuthor();
@@ -35,7 +35,7 @@ public class BooksDTO {
             return true;
         }
 
-        if (other instanceof BooksDTO dto) {
+        if (other instanceof BookDTO dto) {
             if (dto.title == null || dto.author == null) {
                 return false;
             }

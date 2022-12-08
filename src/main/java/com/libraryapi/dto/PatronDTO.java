@@ -1,15 +1,15 @@
 package com.libraryapi.dto;
 
-import com.libraryapi.domain.Patrons;
+import com.libraryapi.domain.Patron;
 
 import java.util.Objects;
 
-public class PatronsDTO {
+public class PatronDTO {
     public Integer patron_id;
     public String name;
     public Double fines;
 
-    public PatronsDTO(Patrons entity) {
+    public PatronDTO(Patron entity) {
         patron_id = entity.getPatronId();
         name = entity.getName();
         fines = entity.getFines();
@@ -30,7 +30,7 @@ public class PatronsDTO {
             return true;
         }
 
-        if (other instanceof PatronsDTO dto) {
+        if (other instanceof PatronDTO dto) {
             if (name == null) {
                 return false;
             }
