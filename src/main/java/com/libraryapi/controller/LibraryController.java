@@ -19,10 +19,10 @@ import java.util.List;
 /**
  * Controller for the Library API, having the following endpoints:
  * <ul>
- *     <li><code>/book/{book_id}/checkout/{patron_id}</code>: Patron checks out a book</li>
+ *     <li><code>/book/{book_id}/checkout/{patron_id}</code>: Check out a book</li>
  *     <li><code>/book/{book_id}/return</code>: Return a book</li>
- *     <li><code>/patron/{patron_id}/checkouts</code>: List patron checkouts</li>
- *     <li><code>/patron/{patron_id}</code>: View patron information</li>
+ *     <li><code>/patron/{patron_id}/checkouts</code>: List a patron's checkouts</li>
+ *     <li><code>/patron/{patron_id}</code>: View a patron's information</li>
  * </ul>
  * @author villaleobos
  */
@@ -40,7 +40,7 @@ public class LibraryController {
 	}
 
 	/**
-	 * A patron checks out a book
+	 * Check out a book
 	 * @param book_id The ID of the book to check out
 	 * @param patron_id The ID of the patron who wishes to check out the book
 	 * @return <code>0</code> if operation was Ok, <code>-3</code> if patron owes fines
@@ -79,7 +79,7 @@ public class LibraryController {
 	}
 
 	/**
-	 * Returns a book that a patron had checked out
+	 * Return a book
 	 * @param book_id The ID of the book to return
 	 * @return <code>0</code> if operation was Ok
 	 * @throws ResponseStatusException if <code>book_id</code> not found
@@ -134,7 +134,7 @@ public class LibraryController {
 	}
 
 	/**
-	 * Check out if patron information
+	 * View a patron's information
 	 * @param patron_id The ID of the patron to list
 	 * @return A <code>PatronDTO</code>, holding all the patron's data
 	 * @throws ResponseStatusException if <code>patron_id</code>
