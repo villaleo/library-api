@@ -5,6 +5,7 @@ import com.libraryapi.domain.PatronRepository;
 import com.libraryapi.dto.BookDTO;
 import com.libraryapi.dto.PatronDTO;
 
+import com.libraryapi.log.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class LibraryController {
 	protected final BookRepository books;
 	protected final PatronRepository patrons;
 
-	public static final int StatusOk        = 0;
+	public static final int StatusOk = 0;
 	public static final int StatusOwesFines = -3;
 
 	public LibraryController(BookRepository books, PatronRepository patrons) {
@@ -49,22 +50,22 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/checkout/{patron_id}")
 	@Transactional
 	public int checkoutBook(@PathVariable int book_id, @PathVariable int patron_id) throws ResponseStatusException {
-		System.out.printf("\t[INFO] Endpoint /book/%d/checkout/%d hit!\n", book_id, patron_id);
+		Logger.info("Endpoint /book/%d/checkout/%d hit!",book_id, patron_id);
 
 		var bookToCheckout = books.findByBookId(book_id);
 		if (bookToCheckout == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID %d does not exist!".formatted(book_id));
 		}
-		System.out.printf("\t[INFO] Found book: %s\n", new BookDTO(bookToCheckout));
+		Logger.info("Found book: %s", new BookDTO(bookToCheckout));
 
 		var patron = patrons.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
-		System.out.printf("\t[INFO] Found patron: %s\n", new PatronDTO(patron));
+		Logger.info("Found patron: %s", new PatronDTO(patron));
 
 		if (patron.getFines() != 0.0) {
-			System.out.printf("\t[WARN] Could not checkout: patron owes fines of $%.2f\n", patron.getFines());
+			Logger.warn("Could not checkout: patron owes fines of $%.2f", patron.getFines());
 			return StatusOwesFines;
 		}
 
@@ -73,7 +74,7 @@ public class LibraryController {
 		bookToCheckout.setCheckoutDate(currentTime);
 		books.save(bookToCheckout);
 
-		System.out.printf("\t[INFO] Updated book: %s\n", new BookDTO(bookToCheckout));
+		Logger.info("Updated book: %s", new BookDTO(bookToCheckout));
 		return StatusOk;
 	}
 
@@ -86,19 +87,19 @@ public class LibraryController {
 	@PutMapping("/book/{book_id}/return")
 	@Transactional
 	public int returnBook(@PathVariable int book_id) throws ResponseStatusException {
-		System.out.printf("\t[INFO] Endpoint /book/%d/return hit!\n", book_id);
+		Logger.info("Endpoint /book/%d/return hit!", book_id);
 
 		var bookToReturn = books.findByBookId(book_id);
 		if (bookToReturn == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID %d does not exist!".formatted(book_id));
 		}
-		System.out.printf("\t[NOTE] Found book: %s\n", new BookDTO(bookToReturn));
+		Logger.info("Found book: %s", new BookDTO(bookToReturn));
 
 		bookToReturn.setCheckoutDate(null);
 		bookToReturn.setCheckoutPatronId(null);
 		books.save(bookToReturn);
 
-		System.out.printf("\t[NOTE] Returned book: %s\n", new BookDTO(bookToReturn));
+		Logger.info("Returned book: %s", new BookDTO(bookToReturn));
 		return StatusOk;
 	}
 
@@ -111,24 +112,24 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}/checkouts")
 	public List<BookDTO> listPatronCheckouts(@PathVariable int patron_id) throws ResponseStatusException {
-		System.out.printf("\t[INFO] Endpoint /patron/%d/checkouts hit!\n", patron_id);
+		Logger.info("Endpoint /patron/%d/checkouts hit!", patron_id);
 
 		var patron = patrons.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
-		System.out.printf("\t[INFO] Found patron: %s\n", new PatronDTO(patron));
+		Logger.info("Found patron: %s", new PatronDTO(patron));
 
 		List<BookDTO> result = new ArrayList<>();
 		var booksCheckedOut = books.findByCheckoutPatronId(patron_id);
 		if (booksCheckedOut.isEmpty()) {
-			System.out.printf("\t[INFO] Patron with ID %d has no books checked out\n", patron_id);
+			Logger.info("Patron with ID %d has no books checked out", patron_id);
 			return result;
 		}
 
 		booksCheckedOut.forEach(book -> result.add(new BookDTO(book)));
-		System.out.println("\t[INFO] Found books:");
-		result.forEach(entry -> System.out.printf("\t\t%s\n", entry));
+		Logger.info("Found books:");
+		result.forEach(entry -> Logger.info("\t * %s", entry));
 		return result;
 	}
 
@@ -141,13 +142,13 @@ public class LibraryController {
 	 */
 	@GetMapping("/patron/{patron_id}")
 	public PatronDTO fetchPatron(@PathVariable int patron_id) throws ResponseStatusException  {
-		System.out.printf("\t[INFO] Endpoint /patron/%d hit!\n", patron_id);
+		Logger.info("Endpoint /patron/%d hit!", patron_id);
 
 		var patron = patrons.findByPatronId(patron_id);
 		if (patron == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron with ID %d does not exist!".formatted(patron_id));
 		}
-		System.out.printf("\t[INFO] Found patron: %s\n", new PatronDTO(patron));
+		Logger.info("Found patron: %s", new PatronDTO(patron));
 		return new PatronDTO(patron);
 	}
 }
